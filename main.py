@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from database import SessionLocal, URL, HealthCheck
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -25,6 +26,12 @@ def read_healthCheck(db: Session = Depends(get_db)):
 
 @app.post("/urls")
 def create_item(url: str, db = Depends(get_db)):
+    if url.startswith("www."):
+            url = "https://" + url
+    parsed = urlparse(url)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        return {"invalid url format"}
+    
     url_obj = URL(address = url)
     db.add(url_obj)
     db.commit()
