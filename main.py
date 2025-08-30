@@ -18,6 +18,11 @@ urls = []
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/hc_all")
+def read_healthCheck(db: Session = Depends(get_db)):
+    healthChecks = db.query(HealthCheck).all()
+    return healthChecks
+
 @app.post("/urls")
 def create_item(url: str, db = Depends(get_db)):
     url_obj = URL(address = url)
