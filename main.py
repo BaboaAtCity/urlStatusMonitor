@@ -24,6 +24,20 @@ def read_healthCheck(db: Session = Depends(get_db)):
     healthChecks = db.query(HealthCheck).all()
     return healthChecks
 
+@app.get("/hc/{url_id}")
+def read_healthCheck_by_id(url_id: int, db: Session = Depends(get_db)):
+    healthChecks = db.query(HealthCheck).filter(HealthCheck.url_id == url_id).all()
+    if not healthChecks:
+        raise HTTPException(status_code=404, detail="No HealthChecks found")
+    return healthChecks
+
+@app.get("/hc_recent/{url_id}")
+def read_healthCheck_recent_by_id(url_id: int, db: Session = Depends(get_db)):
+    healthCheck = db.query(HealthCheck).filter(HealthCheck.url_id == url_id).first()
+    if not healthCheck:
+        raise HTTPException(status_code=404, detail="HealthCheck not found")
+    return healthCheck
+
 @app.post("/urls")
 def create_item(url: str, db = Depends(get_db)):
     if url.startswith("www."):

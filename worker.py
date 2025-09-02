@@ -22,7 +22,7 @@ while True:
         respTime = datetime.datetime.now()
         formatted = respTime.strftime("%M %S")
         print( formatted + str(resp))
-        print(resp)
+        print(f"{datetime.datetime.now()}    {resp}")
         if resp:
             is_up = True
         else:
@@ -37,5 +37,5 @@ while True:
         db.refresh(healthObj)
 
 
-    print(datetime.datetime.now().strftime("%M %S") +"now sleeping")
+    print(f"{datetime.datetime.now()}    now sleeping")
     time.sleep(60)
